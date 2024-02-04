@@ -16,6 +16,9 @@ jobs:
     - name: Set up Bun
       uses: oven-sh/setup-bun@v1
 
+    - name: cd
+      run: cd pwa
+
     - name: Install dependencies
       run: bun install
 
