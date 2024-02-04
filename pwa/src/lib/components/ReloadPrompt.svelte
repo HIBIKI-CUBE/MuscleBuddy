@@ -22,9 +22,9 @@
 {#if $needRefresh}
   <div class="pwa-toast" role="alert">
     <div class="message">
-        <span> 新しいコンテンツが利用可能です。ページを再読み込みして下さい。 </span>
+      <span> 新しいコンテンツが利用可能です。ページを再読み込みして下さい。 </span>
     </div>
-      <button on:click={() => updateServiceWorker(true)}> 再読み込み </button>
+    <button on:click={() => updateServiceWorker(true)}> 再読み込み </button>
     <button on:click={close}> 閉じる </button>
   </div>
 {/if}
