@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Bun
       uses: oven-sh/setup-bun@v1
@@ -27,3 +27,7 @@ jobs:
 
     - name: Lint
       run: bun run lint
+
+    - uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: フォーマット
