@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Genres {
+  id              BigInt            @id @unique @default(autoincrement())
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  name            String            @unique @default("")
+  updated_at      DateTime?         @db.Timestamptz(6)
+  created_by      BigInt?
+  Users           Users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Workouts_Genres Workouts_Genres[]
+}
+
+model MachineTypes {
+  id                    BigInt                  @id @unique @default(autoincrement())
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  name                  String                  @unique @default("")
+  updated_at            DateTime?               @db.Timestamptz(6)
+  created_by            BigInt?
+  Users                 Users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Machines_MachineTypes Machines_MachineTypes[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Machines {
+  id                    BigInt                  @id @unique @default(autoincrement())
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  name                  String                  @unique @default("")
+  updated_at            DateTime?               @db.Timestamptz(6)
+  created_by            BigInt?
+  manufacturer_id       BigInt?
+  Users                 Users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Manufacturers         Manufacturers?          @relation(fields: [manufacturer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Machines_MachineTypes Machines_MachineTypes[]
+}
+
+model Machines_MachineTypes {
+  machine_id       BigInt
+  machine_types_id BigInt
+  Machines         Machines     @relation(fields: [machine_id], references: [id], onUpdate: Restrict)
+  MachineTypes     MachineTypes @relation(fields: [machine_types_id], references: [id], onUpdate: Restrict)
+
+  @@id([machine_types_id, machine_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Manufacturers {
+  id         BigInt     @id(map: "Manufacturer_pkey") @unique(map: "Manufacturer_id_key") @default(autoincrement())
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
+  name       String     @unique(map: "Manufacturer_name_key") @default("")
+  updated_at DateTime?  @db.Timestamptz(6)
+  created_by BigInt?
+  Machines   Machines[]
+  Users      Users?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model TargetParts {
+  id                   BigInt                 @id @unique @default(autoincrement())
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  name                 String                 @unique @default("")
+  updated_at           DateTime?              @db.Timestamptz(6)
+  created_by           BigInt?
+  is_upper_body        Boolean?
+  is_lower_body        Boolean?
+  Users                Users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Workouts_TargetParts Workouts_TargetParts[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Users {
+  id            BigInt          @id @default(autoincrement())
+  name          String
+  created_at    DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?       @db.Timestamptz(6)
+  Genres        Genres[]
+  MachineTypes  MachineTypes[]
+  Machines      Machines[]
+  Manufacturers Manufacturers[]
+  TargetParts   TargetParts[]
+  Workouts      Workouts[]
+}
+
+model Workouts {
+  id                   BigInt                 @id @unique @default(autoincrement())
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  name                 String                 @unique @default("")
+  updated_at           DateTime?              @db.Timestamptz(6)
+  created_by           BigInt?
+  Users                Users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Workouts_Genres      Workouts_Genres[]
+  Workouts_TargetParts Workouts_TargetParts[]
+}
+
+model Workouts_Genres {
+  workout_id BigInt
+  genres_id  BigInt
+  Genres     Genres   @relation(fields: [genres_id], references: [id], onUpdate: Restrict)
+  Workouts   Workouts @relation(fields: [workout_id], references: [id], onUpdate: Restrict)
+
+  @@id([workout_id, genres_id])
+}
+
+model Workouts_TargetParts {
+  workout_id      BigInt
+  target_parts_id BigInt
+  TargetParts     TargetParts @relation(fields: [target_parts_id], references: [id], onUpdate: Restrict)
+  Workouts        Workouts    @relation(fields: [workout_id], references: [id], onUpdate: Restrict)
+
+  @@id([workout_id, target_parts_id])
+}
