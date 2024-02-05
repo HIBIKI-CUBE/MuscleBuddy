@@ -28,6 +28,7 @@ jobs:
     - name: Lint
       run: bun run lint
 
-    - uses: stefanzweifel/git-auto-commit-action@v5
+    - name: Auto Commit
+      uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: フォーマット
