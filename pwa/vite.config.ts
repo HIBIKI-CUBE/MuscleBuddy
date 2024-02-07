@@ -33,10 +33,10 @@ const pwaOptions: SvelteKitPWAOptions = {
     lang: 'ja',
   },
   injectManifest: {
-    globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}'],
+    globPatterns: ['client/**/*.{ico,png,svg,webp,woff,woff2}'],
   },
   workbox: {
-    globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}'],
+    globPatterns: ['client/**/*.{ico,png,svg,webp,woff,woff2}'],
   },
   devOptions: {
     enabled: true,
