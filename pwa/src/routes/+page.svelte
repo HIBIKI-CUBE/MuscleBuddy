@@ -3,7 +3,7 @@
 
   export let data: PageData;
   const { workouts } = data;
-	console.log(workouts)
+  console.log(workouts);
 </script>
 
 {#each workouts as workout}
