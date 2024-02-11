@@ -3,7 +3,7 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
   return {
-    workouts: await prisma.Workouts.findMany({
+    workouts: await prisma.workouts.findMany({
       include: { Users: true },
     }),
   };
